@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { graphql } from 'gatsby';
-import Img from 'gatsby-image';
 import BackgroundImage from 'gatsby-background-image';
-
 import SanityBlockContent from '@sanity/block-content-to-react';
 // import sanityClient from '@sanity/client';
 // import sanityImageUrl from '@sanity/image-url';
@@ -17,7 +15,7 @@ const serializers = {
     videoURL: ({ node }) => {
       const { url } = node;
       return (
-        <PlayerWrapper>
+        <PlayerWrapper className="movie">
           <ReactPlayer
             controls
             url={url}
@@ -25,71 +23,145 @@ const serializers = {
             height="100%"
             style={{ position: 'absolute', top: '0', left: '0' }}
           />
-          ;
         </PlayerWrapper>
       );
     },
   },
 };
+const serializerNoText = {
+  types: {
+    videoURL: ({ node }) => {
+      const { url } = node;
+      return (
+        <PlayerWrapper className="movie">
+          <ReactPlayer
+            controls
+            url={url}
+            width="100%"
+            height="100%"
+            style={{ position: 'absolute', top: '0', left: '0' }}
+          />
+        </PlayerWrapper>
+      );
+    },
+    block: ({ node }) => null,
+  },
+};
 
+const StyledBackgroundImage = styled(BackgroundImage)`
+  height: 550px;
+  max-height: 90vh;
+  @media ${device.mobileL} {
+    height: 250px;
+  }
+`;
 const PlayerWrapper = styled.div`
   position: relative;
   padding-top: 56.25%;
+  margin-bottom: 1em;
+  background: black;
 `;
 const BlockStyles = styled.div`
   margin: 1rem auto;
   padding: 0 1rem;
-  max-width: 900px;
+  max-width: 1100px;
   /* width: 90vw; */
   display: flex;
   justify-content: center;
   flex-direction: column;
   .text-wrap {
     text-align: center;
-    margin: 4rem 0 2rem;
+    margin: 2rem 0 0.5rem;
     @media ${device.mobileL} {
-      margin: 2rem 0 2rem;
+      margin: 1rem 0 1rem;
+    }
+    p {
+      /* font-size: 1.6rem; */
+      @media ${device.mobileL} {
+        font-size: 1.4rem;
+      }
     }
   }
   h1 {
+    margin-bottom: -1.5rem;
+
     @media ${device.mobileL} {
-      font-size: 1.3em;
-      margin-bottom: 1rem;
+      font-size: 2rem;
+      margin-bottom: -1rem;
     }
   }
+  /* now */
+  .text-movie-wrapper {
+    /* margin: 15px; */
+    margin-top: 1em;
+    @media ${device.mobileL} {
+      margin-top: 0em;
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    @media ${device.mobileL} {
+      flex-direction: column;
+    }
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    width: 50%;
+    @media ${device.mobileL} {
+      /* flex-direction: row; */
+      width: 100%;
+    }
+  }
+
+  .text-column {
+    height: auto;
+    margin: 0 2em;
+    word-wrap: break-word;
+    font-size: 1.8rem;
+    text-align: justify;
+
+    .movie {
+      /* THIS HIDES FILMS IN TEXT COLUMN  */
+      display: none;
+    }
+    @media ${device.mobileL} {
+      font-size: 1.4rem;
+      margin: 0 1em;
+    }
+  }
+
+  .movie-column {
+    height: auto;
+  }
 `;
+// video left
 
 export default function SingleFilmPage({ data }) {
-  // const client = sanityClient({
-  //   dataset: process.env.GATSBY_SANITY_DATASET,
-  //   projectId: process.env.GATSBY_SANITY_PROJECT_ID,
-  //   useCdn: true,
-  // });
-  // const builder = sanityImageUrl(client);
-  // // builder.image({ _id: "..." }).width(400).dpr(2).url()
-  // function urlFor(source) {
-  //   return builder.image(source);
-  // }
+  const [isFilm, setIsFilm] = useState(true);
 
-  // x & y will be where the center of the hotspots are
+  useEffect(() => {
+    // if no films, hide the film column
+    if (
+      data.film._rawDescription.filter((e) => e._type === 'videoURL').length ===
+      0
+    ) {
+      setIsFilm();
+    }
+  }, []);
 
   return (
     <>
-      {/* <img
-        src={urlFor(data.film.image._rawAsset._ref).height(600).url()}
-        alt={data.film.name}
-      /> */}
-      {/* <Img
-        fluid={getFluidImage(
-          data.film.image._rawAsset,
-          data.film.image.asset.fluid
-        )}
-      /> */}
-      <BackgroundImage
+      <StyledBackgroundImage
         Tag="section"
         style={{
-          height: '700px',
-          maxHeight: '90vh',
           backgroundPosition: `${
             data.film.image.hotspot ? data.film.image.hotspot.x * 100 : 50
           }% ${
@@ -102,19 +174,44 @@ export default function SingleFilmPage({ data }) {
       <BlockStyles>
         <div className="text-wrap">
           <h1>{data.film.name}</h1>
-          <h3>{data.film.year}</h3>
           <p>{data.film.duration}</p>
         </div>
-        {data.film._rawDescription ? (
-          <SanityBlockContent
-            blocks={data.film._rawDescription}
-            projectId={process.env.GATSBY_SANITY_PROJECT_ID}
-            dataset={process.env.GATSBY_SANITY_DATASET}
-            serializers={serializers}
-          />
-        ) : (
-          ''
-        )}
+
+        <div className="text-movie-wrapper">
+          <div className="row">
+            <div
+              className="column"
+              style={{ display: isFilm ? 'block' : 'none' }}
+            >
+              <div className="movie-column">
+                {data.film._rawDescription ? (
+                  <SanityBlockContent
+                    blocks={data.film._rawDescription}
+                    projectId={process.env.GATSBY_SANITY_PROJECT_ID}
+                    dataset={process.env.GATSBY_SANITY_DATASET}
+                    serializers={serializerNoText}
+                  />
+                ) : (
+                  ''
+                )}
+              </div>
+            </div>
+            <div className="column">
+              <div className="text-column">
+                {data.film._rawDescription ? (
+                  <SanityBlockContent
+                    blocks={data.film._rawDescription}
+                    projectId={process.env.GATSBY_SANITY_PROJECT_ID}
+                    dataset={process.env.GATSBY_SANITY_DATASET}
+                    serializers={serializers}
+                  />
+                ) : (
+                  ''
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </BlockStyles>
     </>
   );
@@ -128,7 +225,6 @@ export const query = graphql`
       id
       _rawDescription
       duration
-      year
       image {
         _key
         _type

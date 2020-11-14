@@ -73,15 +73,15 @@ const ContactStyles = styled.p`
 export default function CVPage({ data }) {
   return (
     <>
-      <BackgroundImage
+      {/* <BackgroundImage
         Tag="section"
         style={{
           minHeight: '600px',
           maxHeight: '90vh',
         }}
         fluid={data.sanityCvPage.image.asset.fluid}
-      />
-      <div style={{ textAlign: 'center', margin: '4rem 0 2rem' }}>
+      /> */}
+      <div style={{ textAlign: 'center', margin: '6rem 0 2rem' }}>
         <h1>Rob Farquhar</h1>
         <h3>Series Director / Producer</h3>
         <ContactStyles>
@@ -147,13 +147,6 @@ export default function CVPage({ data }) {
 export const query = graphql`
   query cvQuery {
     sanityCvPage {
-      image {
-        asset {
-          fluid(maxWidth: 400) {
-            ...GatsbySanityImageFluid
-          }
-        }
-      }
       cvEntries {
         id
         jobName
@@ -163,3 +156,11 @@ export const query = graphql`
     }
   }
 `;
+
+// image {
+//   asset {
+//     fluid(maxWidth: 400) {
+//       ...GatsbySanityImageFluid
+//     }
+//   }
+// }

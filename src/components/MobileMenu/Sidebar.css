@@ -44,16 +44,12 @@
 
 /* General sidebar styles */
 .bm-menu {
-  background: #555555ee;
+  background: #3b3b3bee;
   padding: 1.5em 1.5em 0;
   font-size: 1.15em;
   box-shadow: 5px 10px 40px 0 rgba(0, 0, 0, 0.3);
 
   clip-path: polygon(0 0, 100% 0, 88% 100%, 0% 100%);
-
-  /* could add this slant - but may cause headaches*/
-  /* transform: skewX(-9deg) translate(-60px, 0px);
-  width: 122%; */
 }
 
 /* Morph shape necessary with bubble or elastic */

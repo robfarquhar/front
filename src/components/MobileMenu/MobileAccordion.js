@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
 import _kebabCase from 'lodash/kebabCase';
 import { Link } from 'gatsby';
@@ -6,6 +6,7 @@ import { BiChevronDownCircle as Chevron } from 'react-icons/bi';
 import { CSSTransition } from 'react-transition-group';
 import useComponentVisible from '../../utils/useComponentVisible';
 import { device } from '../../utils/device';
+import { MyContext } from '../MenuProvider';
 
 const AccordionStyles = styled.div`
   position: relative;
@@ -34,7 +35,7 @@ const AccordionStyles = styled.div`
     display: block;
     margin: 0;
     font-size: 2.5rem;
-    font-weight: bold;
+    font-weight: normal;
     pointer-events: none;
   }
 
@@ -127,6 +128,8 @@ function Accordion({ title, items }) {
     };
   }, [isComponentVisible]);
 
+  const ctx = useContext(MyContext);
+
   return (
     <AccordionStyles>
       <div ref={ref} className={`Accordion `}>
@@ -161,6 +164,7 @@ function Accordion({ title, items }) {
                       <Link
                         to={`/film/${item.slug.current}`}
                         className="button"
+                        onClick={ctx.toggleMenu}
                       >
                         {item.name}
                       </Link>

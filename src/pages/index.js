@@ -13,7 +13,7 @@ const IndexStyles = styled.div`
   padding-bottom: 8rem;
 
   @media ${device.mobileL} {
-    padding-bottom: 3rem;
+    padding-bottom: 0rem;
   }
 
   .blurb {
@@ -21,14 +21,20 @@ const IndexStyles = styled.div`
     margin: 2em 0;
     font-size: 2.3rem;
     @media ${device.mobileL} {
-      margin: 1.5em 1em;
-      font-size: 2rem;
+      margin: 1em 1em;
+      font-size: 1.6rem;
     }
   }
   h2 {
     text-align: center;
     font-size: 2.1em;
     margin: 4rem 0 0.6em;
+  }
+  @media ${device.mobileL} {
+    h2 {
+      font-size: 1.6em;
+      margin: 1.6rem 0 0em;
+    }
   }
 `;
 
@@ -53,7 +59,6 @@ export const Query = graphql`
     films: allSanityFilm {
       nodes {
         name
-        year
         duration
         image {
           asset {

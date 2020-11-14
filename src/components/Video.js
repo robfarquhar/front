@@ -11,7 +11,8 @@ const VideoWrapper = styled.div`
   height: 100%;
   margin-top: -8rem;
   @media ${device.mobileL} {
-    margin-top: 0rem;
+    /* margin-top: 0rem; */
+    margin-top: -8rem;
   }
   video {
     max-width: 1500px;
@@ -33,7 +34,7 @@ function Video() {
           { src: '../assets/video/showreel2652k.mp4', type: 'video/mp4' },
         ]}
       /> */}
-      <video autoPlay loop muted>
+      <video autoPlay loop muted playsInline>
         <source src={video} type="video/mp4" />
       </video>
     </VideoWrapper>

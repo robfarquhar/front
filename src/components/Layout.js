@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { MenuProvider } from './MenuProvider';
 import 'normalize.css';
 import Nav from './Nav';
 import Footer from './Footer';
@@ -26,18 +27,20 @@ export default function Layout({ path, children }) {
     <>
       <GlobalStyles id="outer-container" />
       <Typography />
-      {width <= 768 ? (
-        <Sidebar pageWrapId="page-wrap" outerContainerId="outer-container" />
-      ) : (
-        ''
-      )}
-      <SiteBorderStyles id="page-wrap">
-        <ContentStyles>
-          <Nav path={path} width={width} />
-          {children}
-          <Footer />
-        </ContentStyles>
-      </SiteBorderStyles>
+      <MenuProvider>
+        {width <= 768 ? (
+          <Sidebar pageWrapId="page-wrap" outerContainerId="outer-container" />
+        ) : (
+          ''
+        )}
+        <SiteBorderStyles id="page-wrap">
+          <ContentStyles>
+            <Nav path={path} width={width} />
+            {children}
+            <Footer />
+          </ContentStyles>
+        </SiteBorderStyles>
+      </MenuProvider>
     </>
   );
 }

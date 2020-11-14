@@ -48,7 +48,7 @@ const AccordionStyles = styled.div`
     display: block;
     margin: 0;
     font-size: 2.5rem;
-    font-weight: bold;
+    font-weight: normal;
     pointer-events: none;
     margin-bottom: 0.5em;
   }

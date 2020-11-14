@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { device } from '../utils/device';
 
 const FooterStyles = styled.footer`
   width: 100%;
@@ -11,6 +12,9 @@ const FooterStyles = styled.footer`
   align-items: center;
   font-size: 1.5rem;
   margin-top: 3em;
+  @media ${device.mobileL} {
+    margin-top: 0em;
+  }
   a {
     transition: color 0.2s;
   }

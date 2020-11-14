@@ -23,7 +23,11 @@ const NavStyles = styled.nav`
     padding: 2rem 0 2rem 0;
     margin-top: -2rem;
     box-shadow: ${(props) =>
-      props.isNavWhite ? `5px 10px 40px 0 rgba(0, 0, 0, 0.2)` : ''};
+      props.isNavWhite ||
+      props.path === '/commercials/' ||
+      props.path === '/cv/'
+        ? `5px 10px 40px 0 rgba(0, 0, 0, 0.2)`
+        : ''};
     background: ${(props) => (props.isNavWhite ? `white` : 'transparent')};
   }
   ul {
@@ -86,7 +90,6 @@ export default function Nav({ path, width }) {
       // const isVisible = currPos.y > prevPos.y;
       // if (JSON.stringify(isNavWhite) !== JSON.stringify(isNavWhite)) return;
 
-      // console.log(isShow);
       setIsNavWhite(!isVisible);
     },
     [isNavWhite]
@@ -106,7 +109,6 @@ export default function Nav({ path, width }) {
                   current
                 }
                 id
-                category
               }
             }
           }
@@ -131,9 +133,7 @@ export default function Nav({ path, width }) {
                       <li>
                         <Accordion
                           title="Documentaries"
-                          items={data.films.nodes[0].menuEntries.filter(
-                            (film) => film.category === 'documentary'
-                          )}
+                          items={data.films.nodes[0].menuEntries}
                           path={path}
                           isNavWhite={isNavWhite}
                           key={key}
@@ -141,16 +141,7 @@ export default function Nav({ path, width }) {
                         />
                       </li>
                       <li>
-                        <Accordion
-                          title="Commercials"
-                          items={data.films.nodes[0].menuEntries.filter(
-                            (film) => film.category === 'commercial'
-                          )}
-                          path={path}
-                          isNavWhite={isNavWhite}
-                          key={key}
-                          width={width}
-                        />
+                        <Link to="/commercials/">Commercials</Link>
                       </li>
                       <li>
                         <Link to="/cv/">CV</Link>
@@ -163,10 +154,26 @@ export default function Nav({ path, width }) {
           ) : (
             <NavStyles>
               <ul>
-                <li style={{ lineHeight: '1.3', marginTop: '-0.8rem' }}>
-                  <Link to="/">
+                <li
+                  style={{
+                    lineHeight: '1.3',
+                    marginTop: '-0.8rem',
+                  }}
+                >
+                  <Link
+                    to="/"
+                    style={{
+                      color: `${path === '/' ? 'white' : 'black'}`,
+                    }}
+                  >
                     Rob Farquhar{' '}
-                    <p style={{ margin: '0 0 0 -8.6rem', fontSize: '1.5rem' }}>
+                    <p
+                      style={{
+                        margin: '0 0 0 -8.6rem',
+                        fontSize: '1.5rem',
+                        color: `${path === '/' ? 'white' : 'black'}`,
+                      }}
+                    >
                       DIRECTOR
                     </p>
                   </Link>
@@ -179,3 +186,22 @@ export default function Nav({ path, width }) {
     />
   );
 }
+
+// items={data.films.nodes[0].menuEntries.filter(
+//  (film) => film.category === 'documentary'
+// )}
+
+// @media ${device.mobileL} {
+//   color: white;
+// }
+
+// {/* <Accordion
+//                         title="Commercials"
+//                         items={data.films.nodes[0].menuEntries.filter(
+//                           (film) => film.category === 'commercial'
+//                         )}
+//                         path={path}
+//                         isNavWhite={isNavWhite}
+//                         key={key}
+//                         width={width}
+//                       /> */}

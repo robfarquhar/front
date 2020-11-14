@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Link, graphql, StaticQuery, useStaticQuery } from 'gatsby';
+import React, { useContext } from 'react';
+import { Link, graphql, useStaticQuery } from 'gatsby';
 import { slide as Menu } from 'react-burger-menu';
+import { MyContext } from '../MenuProvider';
+
 import Accordion from './MobileAccordion';
 import './Sidebar.css';
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const ctx = useContext(MyContext);
   const { films } = useStaticQuery(
     graphql`
       query MobileNavQuery {
@@ -17,43 +19,46 @@ const Sidebar = () => {
                 current
               }
               id
-              category
             }
           }
         }
       }
     `
   );
+
   return (
-    <Menu width="76vw" isOpen={isOpen}>
-      {/* <button onClick={() => setIsOpen(false)}>CHANGE</button> */}
-      {/* {console.log(films)} */}
-      {console.log(isOpen)}
-      <Link className="menu-item" to="/">
+    <Menu
+      width="76vw"
+      isOpen={ctx.isMenuOpen}
+      onStateChange={(state) => ctx.stateChangeHandler(state)}
+    >
+      <Link className="menu-item" to="/" onClick={ctx.toggleMenu}>
         Home
       </Link>
       <div style={{ position: 'relative' }}>
         <Accordion
           className="menu-item"
           title="Documentaries"
-          items={films.nodes[0].menuEntries.filter(
-            (film) => film.category === 'documentary'
-          )}
+          items={films.nodes[0].menuEntries}
         />
       </div>
-      <div style={{ position: 'relative', paddingBottom: '0.4rem' }}>
-        <Accordion
-          className="menu-item"
-          title="Commercial"
-          items={films.nodes[0].menuEntries.filter(
-            (film) => film.category === 'commercial'
-          )}
-        />
-      </div>
-      <Link className="menu-item" to="/cv">
+      <Link className="menu-item" to="/commercials" onClick={ctx.toggleMenu}>
+        Commercials
+      </Link>
+      <Link className="menu-item" to="/cv" onClick={ctx.toggleMenu}>
         CV
       </Link>
     </Menu>
   );
 };
 export default Sidebar;
+
+// <div style={{ position: 'relative', paddingBottom: '0.4rem' }}>
+//         <Accordion
+//           className="menu-item"
+//           title="Commercial"
+//           items={films.nodes[0].menuEntries.filter(
+//             (film) => film.category === 'commercial'
+//           )}
+//         />
+//       </div>
